@@ -1,0 +1,25 @@
+# ============================================================
+# FlagBridge Workspace — Inverted .gitignore
+# Each subfolder is its own git repo. This repo only tracks
+# the workspace scaffolding (setup, config, Claude agents).
+# ============================================================
+
+# Ignore everything by default
+*
+
+# ── Workspace scaffolding ──────────────────────────────────
+!.gitignore
+!README.md
+!setup.sh
+!flagbridge.code-workspace
+!docker-compose.yml
+!CLAUDE.md
+!CONTEXT.md
+!CONTROL.md
+
+# ── Claude Code config ─────────────────────────────────────
+!.claude/
+!.claude/**
+
+# ── GitHub org-level config ────────────────────────────────
+# (the .github/ repo is cloned separately by setup.sh)

@@ -1,0 +1,34 @@
+{
+  "folders": [
+    { "path": "flagbridge", "name": "flagbridge (api + marketing)" },
+    { "path": "admin", "name": "admin (dashboard)" },
+    { "path": "docs", "name": "docs" },
+    { "path": "sdk-node", "name": "sdk-node" },
+    { "path": "sdk-react", "name": "sdk-react" },
+    { "path": "sdk-go", "name": "sdk-go" },
+    { "path": "sdk-python", "name": "sdk-python" },
+    { "path": "openfeature-provider", "name": "openfeature-provider" },
+    { "path": "plugin-sdk", "name": "plugin-sdk" },
+    { "path": "cli", "name": "cli" },
+    { "path": "create-plugin", "name": "create-plugin" },
+    { "path": "helm-charts", "name": "helm-charts" },
+    { "path": "flagbridge-pro", "name": "flagbridge-pro" },
+    { "path": "files", "name": "files (brand assets)" },
+    { "path": ".github", "name": ".github (org config)" }
+  ],
+  "settings": {
+    "git.autoRepositoryDetection": true,
+    "git.repositoryScanMaxDepth": 1,
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/.DS_Store": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/dist": true,
+      "**/.git": true
+    }
+  }
+}

@@ -1,0 +1,65 @@
+# FlagBridge — Local Development Stack
+# Usage: docker compose up [-d]
+# Starts: PostgreSQL, API (Go), Admin (Next.js), Docs (VitePress)
+
+services:
+  # ── Database ──────────────────────────────────────────────
+  postgres:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: flagbridge
+      POSTGRES_PASSWORD: flagbridge
+      POSTGRES_DB: flagbridge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./flagbridge/apps/api/migrations/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flagbridge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── API (Go) ──────────────────────────────────────────────
+  api:
+    build:
+      context: ./flagbridge/apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgres://flagbridge:flagbridge@postgres:5432/flagbridge?sslmode=disable
+      JWT_SECRET: local-dev-secret-change-in-prod
+      API_KEY_SALT: local-dev-salt-change-in-prod
+      ALLOWED_ORIGINS: http://localhost:3000,http://localhost:3001,http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ── Admin UI (Next.js) ───────────────────────────────────
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+      API_URL_INTERNAL: http://api:8080
+    depends_on:
+      - api
+
+  # ── Docs (VitePress) ─────────────────────────────────────
+  docs:
+    image: node:22-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./docs:/app
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
+
+volumes:
+  pgdata:
